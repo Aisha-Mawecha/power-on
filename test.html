@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUBAS Energy-Saving System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .room-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+        }
+
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .room-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .room-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .occupied {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .unoccupied {
+            background: #27ae60;
+            color: white;
+        }
+
+        .appliances {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .appliance {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .appliance.on {
+            border-color: #27ae60;
+            background: #d5f4e6;
+        }
+
+        .appliance.off {
+            border-color: #e74c3c;
+            background: #fadbd8;
+        }
+
+        .appliance-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .appliance-name {
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .appliance-status {
+            font-size: 0.8em;
+            padding: 3px 8px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .controls {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .controls h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .control-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .control-item label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .control-item input, .control-item select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .activity-log {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-log h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .log-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            transition: background 0.3s ease;
+        }
+
+        .log-entry:hover {
+            background: #f8f9fa;
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .log-time {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        .emergency-stop {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn-emergency {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            font-size: 1.2em;
+            padding: 15px 40px;
+            border-radius: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px rgba(231, 76, 60, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(231, 76, 60, 0.8); }
+            100% { box-shadow: 0 0 20px rgba(231, 76, 60, 0.4); }
+        }
+
+        .system-status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #27ae60;
+            color: white;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #2ecc71;
+            margin-right: 10px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MUBAS Energy-Saving System</h1>
+        </div>
+
+        <div class="system-status">
+            <div class="status-indicator"></div>
+            System Status: ONLINE & MONITORING
+        </div>
+        <div class="rooms-grid">
+            <div class="room-card">
+                <div class="room-header">
+                    <div class="room-title">Classroom </div>
+                    <div class="room-status unoccupied">UNOCCUPIED</div>
+                </div>
+                <div class="appliances">
+                    <div class="appliance off">
+                        <div class="appliance-icon">💡</div>
+                        <div class="appliance-name">Lights</div>
+                        <div class="appliance-status" style="background: #e74c3c;">OFF</div>
+                    </div>
+                   
+                    <div class="appliance off">
+                        <div class="appliance-icon">❄️</div>
+                        <div class="appliance-name">AC</div>
+                        <div class="appliance-status" style="background: #e74c3c;">OFF</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-header">
+                    <div class="room-title"> ICT Lab </div>
+                    <div class="room-status occupied">OCCUPIED</div>
+                </div>
+                <div class="appliances">
+                    <div class="appliance on">
+                        <div class="appliance-icon">💡</div>
+                        <div class="appliance-name">Lights</div>
+                        <div class="appliance-status" style="background: #27ae60;">ON</div>
+                    </div>
+                    <div class="appliance on">
+                        <div class="appliance-icon">🖥️</div>
+                        <div class="appliance-name">Computers</div>
+                        <div class="appliance-status" style="background: #27ae60;">ON</div>
+                    </div>
+                    <div class="appliance on">
+                        <div class="appliance-icon">❄️</div>
+                        <div class="appliance-name">AC</div>
+                        <div class="appliance-status" style="background: #27ae60;">ON</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-header">
+                    <div class="room-title">Office </div>
+                    <div class="room-status unoccupied">UNOCCUPIED</div>
+                </div>
+                <div class="appliances">
+                    <div class="appliance off">
+                        <div class="appliance-icon">💡</div>
+                        <div class="appliance-name">Lights</div>
+                        <div class="appliance-status" style="background: #e74c3c;">OFF</div>
+                    </div>
+                    <div class="appliance off">
+                        <div class="appliance-icon">🖥️</div>
+                        <div class="appliance-name">Computer</div>
+                        <div class="appliance-status" style="background: #e74c3c;">OFF</div>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+
+        <div class="controls">
+            <h3>System Configuration</h3>
+            <div class="control-group">
+                <div class="control-item">
+                    <label>Inactivity Timer (minutes):</label>
+                    <input type="number" value="30" min="5" max="120" id="inactivityTimer">
+                </div>
+                <div class="control-item">
+                    <label>Auto-shutdown Time:</label>
+                    <input type="time" value="22:00" id="shutdownTime">
+                </div>
+
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+                <button class="btn btn-primary" onclick="refreshData()"> Refresh Data</button>
+            </div>
+        </div>
+       
+    </div>
+
+    <script>
+        // Simulated data update function
+        function refreshData() {
+            // Simulate data refresh
+            const btn = event.target;
+            btn.textContent = ' Refreshing...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.textContent = ' Refresh Data';
+                btn.disabled = false;
+                alert(' Data refreshed successfully!');
+            }, 2000);
+        }
+
+        // Save settings function
+        function saveSettings() {
+            const timer = document.getElementById('inactivityTimer').value;
+            const shutdown = document.getElementById('shutdownTime').value;
+            const sensitivity = document.getElementById('sensitivity').value;
+            const weekend = document.getElementById('weekendMode').value;
+            
+            // Simulate saving settings
+            alert(` Settings saved successfully!\n\nInactivity Timer: ${timer} minutes\nAuto-shutdown: ${shutdown}\nSensitivity: ${sensitivity}\nWeekend Mode: ${weekend}`);
+        }
+
+       
+        // Simulate real-time updates
+        setInterval(() => {
+            // This would normally fetch real data from the ESP32
+            console.log('Checking for system updates...');
+        }, 30000); // Check every 30 seconds
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.appliance').forEach(appliance => {
+            appliance.addEventListener('click', function() {
+                const isOn = this.classList.contains('on');
+                const applianceName = this.querySelector('.appliance-name').textContent;
+                const roomName = this.closest('.room-card').querySelector('.room-title').textContent;
+                
+                if (confirm(`${isOn ? 'Turn OFF' : 'Turn ON'} ${applianceName} in ${roomName}?`)) {
+                    // Toggle appliance state
+                    this.classList.toggle('on');
+                    this.classList.toggle('off');
+                    
+                    const status = this.querySelector('.appliance-status');
+                    if (this.classList.contains('on')) {
+                        status.textContent = 'ON';
+                        status.style.background = '#27ae60';
+                    } else {
+                        status.textContent = 'OFF';
+                        status.style.background = '#e74c3c';
+                    }
+                }
+            });
+        });
+
+        // Show welcome message
+        setTimeout(() => {
+            alert(' Welcome to MUBAS Energy-Saving System!\n\nClick on any appliance to manually control it.\nThe system automatically monitors room occupancy and manages energy usage.');
+        }, 1000);
+    </script>
+</body>
+</html>
